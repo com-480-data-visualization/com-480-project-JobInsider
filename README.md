@@ -38,6 +38,8 @@ The motivation behind this data visualization project is to provide insights int
 > Pre-processing of the data set you chose
 > - Show some basic statistics and get insights about the data
 
+Please refer to [this notebook](milestone-1/explore.ipynb)
+
 ### Related work
 
 

@@ -2,7 +2,7 @@
 
 | Student's name               | SCIPER |
 | ---------------------------- | ------ |
-| Illanes Argote Cesar Ernesto |        |
+| Cesar Ernesto Illanes Argote | 396219 |
 | Yuanlong Li                  | 322588 |
 | Tianzong Zhang               | 299091 |
 
@@ -19,7 +19,7 @@ Please, fill the following sections about your project.
 
 ### Dataset
 
-We use [LinkedIn Job Postings (2023 - 2024)](https://www.kaggle.com/datasets/arshkon/linkedin-job-postings) that is publicly avaliable from Kaggle. Below is an exerpt from the dataset discription:
+We use [LinkedIn Job Postings (2023 - 2024)](https://www.kaggle.com/datasets/arshkon/linkedin-job-postings) that is publicly avaliable from Kaggle. Below is an exerpt from the dataset description:
 
 > This dataset contains a nearly comprehehsive record of 124,000+ job postings listed in 2023 and 2024. Each individual posting contains dozens of valuable attributes for both postings and companies, including the title, job description, salary, location, application URL, and work-types (remote, contract, etc), in addition to separate files containing the benefits, skills, and industries associated with each posting. The majority of jobs are also linked to a company, which are all listed in another csv file containing attributes such as the company description, headquarters location, and number of employees, and follower count.
 >
@@ -45,6 +45,13 @@ The motivation behind this data visualization project is to provide insights int
 > - Why is your approach original?
 > - What source of inspiration do you take? Visualizations that you found on other websites or magazines (might be unrelated to your data).
 > - In case you are using a dataset that you have already explored in another context (ML or ADA course, semester project...), you are required to share the report of that work to outline the differences with the submission for this class.
+
+This dataset has been previously utilized in several analyses available on [Kaggle](https://www.kaggle.com/datasets/arshkon/linkedin-job-postings/code). However, the majority of these analyses are limited in scope, primarily consisting of basic visualizations within Jupyter notebooks, including [the one](https://www.kaggle.com/code/arshkon/getting-started-basic-analysis/notebook) developed by the dataset's original author. The Exploratory Data Analysis (EDA) presented in those works closely resembles the preliminary analysis conducted by our team.
+
+The proposed approach seeks to provide a more comprehensive and visually engaging analysis by incorporating advanced visualizations and interactive elements. Additionally, we intend to integrate supplementary datasets to contextualize observed labor market trends over recent years and explore potential future developments. This approach aims to enhance interpretability and accessibility of the findings, particularly for recent graduates and early-career professionals.
+
+It is important to note that none of the team members have previously worked with this dataset.
+
 
 ## Milestone 2 (18th April, 5pm)
 

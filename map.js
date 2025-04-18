@@ -3,48 +3,15 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
 let stateData = {},
     geojsonLayer,
-    startDate = "2024-04-01",
-    endDate = "2024-04-30";
+    startDate,
+    endDate;
 
-// Function to convert string date to Date object
-function parseDate(dateStr) {
-    return new Date(dateStr);
-}
-
-// Function to format Date as YYYY-MM-DD
 function formatDate(date) {
     const d = new Date(date);
     const month = ('0' + (d.getMonth() + 1)).slice(-2);
     const day = ('0' + d.getDate()).slice(-2);
     return `${d.getFullYear()}-${month}-${day}`;
 }
-
-Promise.all([
-    d3.json('us-states.json'), // Your state polygons
-    d3.json('data_processed/state_time_series.json') // Your daily data
-]).then(([geojson, stateTimeSeries]) => {
-    stateData = stateTimeSeries;
-
-    // Find the min and max dates from the data
-    let allDates = [];
-    Object.values(stateTimeSeries).forEach(stateData => {
-        stateData.forEach(entry => {
-            if (entry.date && !allDates.includes(entry.date)) {
-                allDates.push(entry.date);
-            }
-        });
-    });
-
-    allDates.sort();
-    if (allDates.length > 0) {
-        startDate = allDates[0];
-        endDate = allDates[allDates.length - 1];
-    }
-
-    showSlider(allDates);
-
-    updateMap();
-});
 
 function showSlider(allDates) {
     const slider = d3.select("#slider")
@@ -148,7 +115,16 @@ function updateMap() {
         .domain(d3.extent(Object.values(salaryByState).filter(s => s > 0)))
         .range(d3.schemeBlues[9]);
 
-    if (geojsonLayer) {
+    showLegend(color);
+
+    const state = d3.select("#chart").attr("data-state");
+
+    if (state)
+        showChart(state);
+
+    if (!geojsonLayer)
+        return;
+
     geojsonLayer.setStyle(feature => {
         const stateName = feature.properties.NAME;
         const salary = salaryByState[stateName];
@@ -160,14 +136,6 @@ function updateMap() {
             fillOpacity: 0.8
         };
     });
-    }
-
-    showLegend(color);
-
-    const selectedState = d3.select("#chart").attr("data-state");
-
-    if (selectedState)
-        showChart(selectedState);
 }
 
 function showLegend(color) {
@@ -196,12 +164,13 @@ function showLegend(color) {
 function showChart(stateName) {
     const rawData = stateData[stateName] || [];
 
-    // Filter by date range
+    const start = new Date(startDate);
+    const end   = new Date(endDate);
+
     const data = rawData
         .map(d => ({...d, date: new Date(d.date) }))
         .filter(d => {
-            const dateStr = formatDate(d.date);
-            return dateStr >= startDate && dateStr <= endDate;
+            return d.date >= start && d.date <= end && d.median_salary !== -1;
         })
         .sort((a, b) => a.date - b.date);
 
@@ -216,13 +185,14 @@ function showChart(stateName) {
     // Clear existing chart
     chart.html("");
 
-    const margin = { top: 30, right: 50, bottom: 30, left: 60 };
-    const width = 600 - margin.left - margin.right;
-    const height = 300 - margin.top - margin.bottom;
+    const margin = { top: 15, right: 35, bottom: 15, left: 35 };
+    const width  = chart.node().clientWidth  * 0.68  - margin.left - margin.right;
+    const height = chart.node().clientHeight * 0.97 - margin.top  - margin.bottom;
 
     const svg = chart.append("svg")
         .attr("class", "chart-svg")
-        .append("g");
+        .append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
 
     // Scales
     const x = d3.scaleTime()
@@ -242,7 +212,7 @@ function showChart(stateName) {
     // Axes
     svg.append("g")
         .attr("transform", `translate(0,${height})`)
-        .call(d3.axisBottom(x).ticks(6));
+        .call(d3.axisBottom(x));
 
     svg.append("g")
         .call(d3.axisLeft(yJobs));
@@ -251,7 +221,7 @@ function showChart(stateName) {
         .attr("transform", `translate(${width},0)`)
         .call(d3.axisRight(ySalary));
 
-    // Bar chart for job_count
+    // This is broken
     const barWidth = width / data.length - 2;
 
     svg.selectAll(".bar")
@@ -279,14 +249,76 @@ function showChart(stateName) {
         .attr("stroke", "#1976D2")
         .attr("stroke-width", 2)
         .attr("d", line);
+
+    svg.append("text")
+        .attr("x", width / 2)
+        .attr("y", 10)
+        .attr("text-anchor", "middle")
+        .attr("font-size", "16px")
+        .attr("fill", "#333")
+        .text(`Job Stats for ${stateName} (${startDate} to ${endDate})`);
 }
 
 function onEachFeature(feature, layer) {
     layer.on('click', () => showChart(feature.properties.NAME));
-    layer.bindTooltip(feature.properties.NAME, { sticky: true });
+    layer.bindTooltip(function(layer) {
+        if (!stateData)
+            return feature.properties.NAME;
+
+        const raw = stateData[feature.properties.NAME] || [];
+
+        const start = new Date(startDate);
+        const end   = new Date(endDate);
+
+        const data = raw
+            .map(d => ({...d, date: new Date(d.date) }))
+            .filter(d => {
+                return d.date >= start && d.date <= end && d.median_salary !== -1;
+            })
+            .sort((a, b) => a.date - b.date);
+
+        if (data.length === 0)
+            return feature.properties.NAME;
+
+        const index = Math.floor(data.length / 2);
+        const median = (data.length % 2 === 0) ?
+            ((data[index - 1].median_salary + data[index].median_salary) / 2) :
+              data[index].median_salary;
+
+        // Get the total job count
+        const jobs = data.reduce((acc, d) => acc + d.job_count, 0);
+
+        return `${feature.properties.NAME}<br>
+                Median Salary: $${median.toLocaleString()}<br>
+                Total Job Count: ${jobs}`;
+
+    }, { sticky: true });
 }
 
-// Create the geojson layer
+d3.json('data_processed/state_time_series.json').then(stateTimeSeries => {
+    stateData = stateTimeSeries;
+
+    // Find the min and max dates from the data
+    let allDates = [];
+    Object.values(stateTimeSeries).forEach(stateData => {
+        stateData.forEach(entry => {
+            if (entry.date && !allDates.includes(entry.date)) {
+                allDates.push(entry.date);
+            }
+        });
+    });
+
+    allDates.sort();
+    if (allDates.length > 0) {
+        startDate = allDates[0];
+        endDate = allDates[allDates.length - 1];
+    }
+
+    showSlider(allDates);
+
+    updateMap();
+});
+
 d3.json('us-states.json').then(geojson => {
     geojsonLayer = L.geoJson(geojson, {
         style: {

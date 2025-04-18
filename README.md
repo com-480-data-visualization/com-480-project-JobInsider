@@ -59,6 +59,7 @@ It is important to note that none of the team members have previously worked wit
 
 **10% of the final grade**
 
+Please refer to [this pdf](milestone-2/milestone_2.pdf) for the report.
 
 ## Milestone 3 (30th May, 5pm)
 

@@ -97,7 +97,7 @@ Please refer to `milestone-3/` for the process book and the screencast. The demo
 3. Click "Go Live" in the bottom right corner of the VS code interface.
 
 #### Technical Stack
-Our demo uses html, CSS and javascript (specifically d3.js, leaflet.js) as technical stack.
+Our demo uses html, CSS and javascript (specifically d3.js, leaflet.js) as frontend technical stack, and python (specifically numpy, pandas) as backend stack.
 
 ### Intended Usage
 The user will be able to see the statistics of the current job market, including the number of job posting as well as its median salary for each states in the US. In addition, the user will be able to select a date range to see the statistics within the selected date range. 

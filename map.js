@@ -136,6 +136,7 @@ function updateMap() {
         
         const raw = stateData[feature.properties.NAME] || [];
 
+
         const start = new Date(startDate);
         const end   = new Date(endDate);
 
@@ -147,7 +148,7 @@ function updateMap() {
             .sort((a, b) => a.date - b.date);
 
         if (data.length === 0)
-            return feature.properties.NAME;
+            return defaultStyle;
 
         const index = Math.floor(data.length / 2);
         const median = (data.length % 2 === 0) ?
@@ -155,10 +156,9 @@ function updateMap() {
               data[index].median_salary;
 
 
-
-        if (stateName === "Mississippi") {
-            console.log(`State: ${stateName}, Salary: ${median}`);
-        };
+        // if (stateName === "Nebraska") {
+        //     console.log(`State: ${stateName}, Salary: ${median}`);
+        // };
         return {
             fillColor: median ? color(median) : 'rgba(255, 255, 255, 0)',
             weight: 1.5,
@@ -171,7 +171,6 @@ function updateMap() {
 
 function showLegend(color) {
     const legend = d3.select("#legend");
-    console.log(color.domain(), color.range());
 
     legend.html("");
 
@@ -199,8 +198,6 @@ function showLegend(color) {
 
 function showChart(stateName) {
     const rawData = stateData[stateName] || [];
-
-    console.log(rawData);
 
     const start = new Date(startDate);
     const end   = new Date(endDate);
@@ -353,8 +350,6 @@ d3.json('data_processed/state_time_series.json').then(stateTimeSeries => {
         endDate = allDates[allDates.length - 1];
     }
 
-    console.log(`Start Date: ${startDate}, End Date: ${endDate}`);
-
     Object.keys(stateTimeSeries).forEach(state => {
         const entries = stateTimeSeries[state];
         
@@ -378,16 +373,18 @@ d3.json('data_processed/state_time_series.json').then(stateTimeSeries => {
     setTimeout(() => showChart('California'), 100); // Show California by default
 });
 
+const defaultStyle = {
+    fillColor: 'rgba(255, 255, 255, 0)',
+    weight: 1.5,
+    opacity: 1,
+    color: 'black',
+    fillOpacity: 0.9,
+};
+
 d3.json('data_processed/us-states.json').then(geojson => {
     geojsonLayer = L.geoJson(geojson, {
         pane: 'blendedPane',
-        style: {
-            fillColor: '#ccc',
-            weight: 1,
-            opacity: 1,
-            color: 'white',
-            fillOpacity: 0.8
-        },
+        style: defaultStyle,
         onEachFeature
     }).addTo(map);
 });

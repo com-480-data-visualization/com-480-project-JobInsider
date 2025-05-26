@@ -1,5 +1,8 @@
 const map = L.map('map').setView([37.8, -96], 4);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+L.maplibreGL({
+    style: 'https://tiles.stadiamaps.com/styles/stamen_toner.json', // Style URL; see our documentation for more options
+    attribution: 'Data: <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>',
+}).addTo(map);
 
 let stateData = {},
     geojsonLayer,
@@ -53,7 +56,7 @@ function showSlider(allDates) {
         .clamp(true);
 
     const axis = d3.axisBottom(time)
-        .tickFormat(d3.timeFormat("%b %d"))
+        .tickFormat(d3.timeFormat("%d.%m"))
         .ticks(4);
 
     svg.append("g")
@@ -113,7 +116,7 @@ function updateMap() {
 
     const color = d3.scaleQuantize()
         .domain(d3.extent(Object.values(salaryByState).filter(s => s > 0)))
-        .range(d3.schemeBlues[9]);
+        .range(["#ffffe5","#fff6c0","#fee799","#fece66","#fdac3b","#f58720","#e1640e","#bf4804","#933304","#662506"]);
 
     showLegend(color);
 
@@ -127,9 +130,35 @@ function updateMap() {
 
     geojsonLayer.setStyle(feature => {
         const stateName = feature.properties.NAME;
-        const salary = salaryByState[stateName];
+        // const salary = salaryByState[stateName];
+        
+        const raw = stateData[feature.properties.NAME] || [];
+
+        const start = new Date(startDate);
+        const end   = new Date(endDate);
+
+        const data = raw
+            .map(d => ({...d, date: new Date(d.date) }))
+            .filter(d => {
+                return d.date >= start && d.date <= end && d.median_salary !== -1;
+            })
+            .sort((a, b) => a.date - b.date);
+
+        if (data.length === 0)
+            return feature.properties.NAME;
+
+        const index = Math.floor(data.length / 2);
+        const median = (data.length % 2 === 0) ?
+            ((data[index - 1].median_salary + data[index].median_salary) / 2) :
+              data[index].median_salary;
+
+
+
+        if (stateName === "Mississippi") {
+            console.log(`State: ${stateName}, Salary: ${median}`);
+        };
         return {
-            fillColor: salary ? color(salary) : '#ccc',
+            fillColor: median ? color(median) : '#ccc',
             weight: 1,
             opacity: 1,
             color: 'white',
@@ -140,29 +169,36 @@ function updateMap() {
 
 function showLegend(color) {
     const legend = d3.select("#legend");
+    console.log(color.domain(), color.range());
 
     legend.html("");
 
     const domain = color.domain();
     const step = (domain[1] - domain[0]) / color.range().length;
 
+    // Generate reversed data range
+    const dataRange = d3.range(domain[0], domain[1], step).reverse();
+
     const items = legend.selectAll(".legend-item")
-        .data(d3.range(domain[0], domain[1], step))
+        .data(dataRange)
         .enter()
         .append("div")
-        .attr("class", "legend-item")
+        .attr("class", "legend-item");
 
     items.append("div")
         .attr("class", "legend-div")
-        .style("background", d => color(d))
+        .style("background", d => color(d));
 
     items.append("span")
         .attr("class", "legend-span")
         .text(d => `$${Math.round(d).toLocaleString()}`);
 }
 
+
 function showChart(stateName) {
     const rawData = stateData[stateName] || [];
+
+    console.log(rawData);
 
     const start = new Date(startDate);
     const end   = new Date(endDate);
@@ -170,7 +206,7 @@ function showChart(stateName) {
     const data = rawData
         .map(d => ({...d, date: new Date(d.date) }))
         .filter(d => {
-            return d.date >= start && d.date <= end && d.median_salary !== -1;
+            return d.date >= start && d.date <= end; // && d.median_salary !== -1;
         })
         .sort((a, b) => a.date - b.date);
 
@@ -222,6 +258,7 @@ function showChart(stateName) {
         .call(d3.axisRight(ySalary));
 
     // This is broken
+    console.log(data);
     const barWidth = width / data.length - 2;
 
     svg.selectAll(".bar")
@@ -241,7 +278,8 @@ function showChart(stateName) {
 
     const line = d3.line()
         .x(d => x(d.date))
-        .y(d => ySalary(d.median_salary));
+        .y(d => ySalary(d.median_salary))
+        .curve(d3.curveMonotoneX);
 
     svg.append("path")
         .datum(salaryData)
@@ -278,7 +316,7 @@ function onEachFeature(feature, layer) {
             .sort((a, b) => a.date - b.date);
 
         if (data.length === 0)
-            return feature.properties.NAME;
+            return `<h4>${feature.properties.NAME}</h4> <br> No data for the selected date range`;
 
         const index = Math.floor(data.length / 2);
         const median = (data.length % 2 === 0) ?
@@ -288,7 +326,7 @@ function onEachFeature(feature, layer) {
         // Get the total job count
         const jobs = data.reduce((acc, d) => acc + d.job_count, 0);
 
-        return `${feature.properties.NAME}<br>
+        return `<h4>${feature.properties.NAME}</h4><br>
                 Median Salary: $${median.toLocaleString()}<br>
                 Total Job Count: ${jobs}`;
 
@@ -296,6 +334,7 @@ function onEachFeature(feature, layer) {
 }
 
 d3.json('data_processed/state_time_series.json').then(stateTimeSeries => {
+
     stateData = stateTimeSeries;
 
     // Find the min and max dates from the data
@@ -313,6 +352,27 @@ d3.json('data_processed/state_time_series.json').then(stateTimeSeries => {
         startDate = allDates[0];
         endDate = allDates[allDates.length - 1];
     }
+
+    console.log(`Start Date: ${startDate}, End Date: ${endDate}`);
+
+    // Step 1: Normalize each state's time series
+    Object.keys(stateTimeSeries).forEach(state => {
+        const entries = stateTimeSeries[state];
+        
+        // Create a map from date to entry for quick lookup
+        const dateMap = new Map(entries.map(d => [d.date, d]));
+
+        // Fill missing dates with default values
+        const filledEntries = allDates.map(date => {
+            return dateMap.get(date) || { date: date, job_count: 0, median_salary: -1 };
+        });
+
+        // Replace the original state data with the filled one
+        stateTimeSeries[state] = filledEntries;
+    });
+    
+
+    stateData = stateTimeSeries;
 
     showSlider(allDates);
 

@@ -399,6 +399,11 @@
   ],
   "California": [
     {
+      "date": "2024-02-13",
+      "job_count": 1,
+      "median_salary": -1.0
+    },
+    {
       "date": "2024-03-11",
       "job_count": 4,
       "median_salary": 158350.0
@@ -1029,6 +1034,16 @@
   ],
   "Florida": [
     {
+      "date": "2023-12-08",
+      "job_count": 1,
+      "median_salary": -1.0
+    },
+    {
+      "date": "2024-02-05",
+      "job_count": 1,
+      "median_salary": 145000.0
+    },
+    {
       "date": "2024-03-06",
       "job_count": 1,
       "median_salary": -1.0
@@ -1200,6 +1215,16 @@
     }
   ],
   "Georgia": [
+    {
+      "date": "2023-12-05",
+      "job_count": 1,
+      "median_salary": -1.0
+    },
+    {
+      "date": "2024-02-19",
+      "job_count": 1,
+      "median_salary": -1.0
+    },
     {
       "date": "2024-03-01",
       "job_count": 1,
@@ -2182,6 +2207,11 @@
   ],
   "Louisiana": [
     {
+      "date": "2023-12-21",
+      "job_count": 1,
+      "median_salary": -1.0
+    },
+    {
       "date": "2024-03-15",
       "job_count": 1,
       "median_salary": -1.0
@@ -2355,6 +2385,11 @@
     }
   ],
   "Maryland": [
+    {
+      "date": "2024-01-24",
+      "job_count": 1,
+      "median_salary": -1.0
+    },
     {
       "date": "2024-03-15",
       "job_count": 5,
@@ -2756,6 +2791,16 @@
     }
   ],
   "Minnesota": [
+    {
+      "date": "2024-01-16",
+      "job_count": 1,
+      "median_salary": -1.0
+    },
+    {
+      "date": "2024-02-20",
+      "job_count": 1,
+      "median_salary": 33280.0
+    },
     {
       "date": "2024-03-12",
       "job_count": 1,
@@ -3618,6 +3663,11 @@
   ],
   "New Mexico": [
     {
+      "date": "2024-01-05",
+      "job_count": 2,
+      "median_salary": -1.0
+    },
+    {
       "date": "2024-03-11",
       "job_count": 1,
       "median_salary": -1.0
@@ -3704,6 +3754,11 @@
     }
   ],
   "New York": [
+    {
+      "date": "2024-02-29",
+      "job_count": 1,
+      "median_salary": 60000.0
+    },
     {
       "date": "2024-03-11",
       "job_count": 3,
@@ -3856,6 +3911,11 @@
     }
   ],
   "North Carolina": [
+    {
+      "date": "2024-02-12",
+      "job_count": 1,
+      "median_salary": -1.0
+    },
     {
       "date": "2024-03-11",
       "job_count": 2,
@@ -4456,6 +4516,11 @@
     }
   ],
   "Pennsylvania": [
+    {
+      "date": "2024-02-14",
+      "job_count": 1,
+      "median_salary": 81000.0
+    },
     {
       "date": "2024-03-12",
       "job_count": 4,

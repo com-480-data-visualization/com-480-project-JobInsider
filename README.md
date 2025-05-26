@@ -65,6 +65,49 @@ Please refer to [this pdf](milestone-2/milestone_2.pdf) for the report.
 
 **80% of the final grade**
 
+## Table of Contents
+- [Overview](#overview)
+- [Technical Setup](#technical-setup)
+  - [Files and Structure](#files-and-structure)
+  - [Dependencies](#dependencies)
+  - [Installation](#installation)
+- [Intended Usage](#intended-usage)
+  - [Search and Filter Songs](#search-and-filter-songs)
+  - [Sort Songs](#sort-songs)
+  - [DJ Table Filters](#dj-table-filters)
+  - [Audio Player](#audio-player)
+  - [Reset Filters and Sorting](#reset-filters-and-sorting)
+
+## Overview
+Our visualization consists of a web application for users to browse the statistics of the current job market, including the number of job posting as well as its salary.
+
+Please refer to `milestone-3/` for the process book and the screencast. The demo website can be accessed [here](https://com-480-data-visualization.github.io/com-480-project-JobInsider/).
+
+## Technical Setup
+
+### Files and Structure
+- `index.html`: The HTML file that serves as the portal of our demo.
+- `styles.css`: The CSS file that contains styles for the HTML elements.
+- `map.js`: The JavaScript file that handles the map logic.
+- `data_processed/`: Directory for the processed data, including the US states shapefile, and the job market statistics. The processing step is implemented in `milestone-2/data_cleaning.ipynb`.
+
+### Installation
+1. Clone the repository to your local machine.
+2. Open with VS code and install VS Code Live Server extension.
+3. Click "Go Live" in the bottom right corner of the VS code interface.
+
+### Stack
+Our demo uses html, CSS and javascript (specifically d3.js, leaflet.js) as technical stack.
+
+## Intended Usage
+The user will be able to see the statistics of the current job market, including the number of job posting as well as its median salary for each states in the US. In addition, the user will be able to select a date range to see the statistics within the selected date range. 
+
+The data is visualized three-fold:
+- In the map, where a color scheme is used to show the level of the median salary for each state and selected time range;
+- In the tooltip box inside the map, where the same statistics in the map are shown as a number;
+- In the bottom chart box, where for a given state (clicked by the user) the time series of the statistics will be shown for every day within the date range.
+
+
 
 ## Late policy
 

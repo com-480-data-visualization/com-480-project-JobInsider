@@ -1,8 +1,10 @@
 const map = L.map('map').setView([37.8, -96], 4);
 L.maplibreGL({
-    style: 'https://tiles.stadiamaps.com/styles/stamen_toner.json', // Style URL; see our documentation for more options
+    style: 'https://tiles.stadiamaps.com/styles/stamen_toner.json', 
     attribution: 'Data: <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>',
 }).addTo(map);
+map.createPane('blendedPane');
+map.getPane('blendedPane').style.mixBlendMode = 'multiply';
 
 let stateData = {},
     geojsonLayer,
@@ -159,10 +161,10 @@ function updateMap() {
         };
         return {
             fillColor: median ? color(median) : '#ccc',
-            weight: 1,
+            weight: 1.5,
             opacity: 1,
-            color: 'white',
-            fillOpacity: 0.8
+            color: 'black',
+            fillOpacity: 0.9,
         };
     });
 }
@@ -257,8 +259,6 @@ function showChart(stateName) {
         .attr("transform", `translate(${width},0)`)
         .call(d3.axisRight(ySalary));
 
-    // This is broken
-    console.log(data);
     const barWidth = width / data.length - 2;
 
     svg.selectAll(".bar")
@@ -355,19 +355,16 @@ d3.json('data_processed/state_time_series.json').then(stateTimeSeries => {
 
     console.log(`Start Date: ${startDate}, End Date: ${endDate}`);
 
-    // Step 1: Normalize each state's time series
     Object.keys(stateTimeSeries).forEach(state => {
         const entries = stateTimeSeries[state];
         
-        // Create a map from date to entry for quick lookup
         const dateMap = new Map(entries.map(d => [d.date, d]));
 
-        // Fill missing dates with default values
+        // Fill in missing dates with default values
         const filledEntries = allDates.map(date => {
             return dateMap.get(date) || { date: date, job_count: 0, median_salary: -1 };
         });
 
-        // Replace the original state data with the filled one
         stateTimeSeries[state] = filledEntries;
     });
     
@@ -376,11 +373,14 @@ d3.json('data_processed/state_time_series.json').then(stateTimeSeries => {
 
     showSlider(allDates);
 
-    updateMap();
+    // update map after 100ms
+    setTimeout(updateMap, 100);
+    setTimeout(() => showChart('California'), 100); // Show California by default
 });
 
-d3.json('us-states.json').then(geojson => {
+d3.json('data_processed/us-states.json').then(geojson => {
     geojsonLayer = L.geoJson(geojson, {
+        pane: 'blendedPane',
         style: {
             fillColor: '#ccc',
             weight: 1,

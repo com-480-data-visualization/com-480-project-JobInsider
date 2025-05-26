@@ -65,7 +65,10 @@ Please refer to [this pdf](milestone-2/milestone_2.pdf) for the report.
 
 **80% of the final grade**
 
-## Table of Contents
+
+**NB: Please use [this link](https://docs.google.com/document/d/118ryUVbMtIioDq76X0Et9nN6jhbf6ABwBqnOl0pCSfk/edit?usp=sharing) to edit the processed book!!**
+
+### Table of Contents
 - [Overview](#overview)
 - [Technical Setup](#technical-setup)
   - [Files and Structure](#files-and-structure)
@@ -74,12 +77,11 @@ Please refer to [this pdf](milestone-2/milestone_2.pdf) for the report.
   - [Technical Stack](#technical-stack)
 - [Intended Usage](#intended-usage)
 
-## Overview
+### Overview
 Our visualization consists of a web application for users to browse the statistics of the current job market, including the number of job posting as well as its salary.
 
 Please refer to `milestone-3/` for the process book and the screencast. The demo website can be accessed [here](https://com-480-data-visualization.github.io/com-480-project-JobInsider/).
 
-**NB: Please use [this link](https://docs.google.com/document/d/118ryUVbMtIioDq76X0Et9nN6jhbf6ABwBqnOl0pCSfk/edit?usp=sharing) to edit the processed book!!**
 
 ### Technical Setup
 

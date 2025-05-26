@@ -71,35 +71,33 @@ Please refer to [this pdf](milestone-2/milestone_2.pdf) for the report.
   - [Files and Structure](#files-and-structure)
   - [Dependencies](#dependencies)
   - [Installation](#installation)
+  - [Technical Stack](#technical-stack)
 - [Intended Usage](#intended-usage)
-  - [Search and Filter Songs](#search-and-filter-songs)
-  - [Sort Songs](#sort-songs)
-  - [DJ Table Filters](#dj-table-filters)
-  - [Audio Player](#audio-player)
-  - [Reset Filters and Sorting](#reset-filters-and-sorting)
 
 ## Overview
 Our visualization consists of a web application for users to browse the statistics of the current job market, including the number of job posting as well as its salary.
 
 Please refer to `milestone-3/` for the process book and the screencast. The demo website can be accessed [here](https://com-480-data-visualization.github.io/com-480-project-JobInsider/).
 
-## Technical Setup
+**NB: Please use [this link](https://docs.google.com/document/d/118ryUVbMtIioDq76X0Et9nN6jhbf6ABwBqnOl0pCSfk/edit?usp=sharing) to edit the processed book!!**
 
-### Files and Structure
+### Technical Setup
+
+#### Files and Structure
 - `index.html`: The HTML file that serves as the portal of our demo.
 - `styles.css`: The CSS file that contains styles for the HTML elements.
 - `map.js`: The JavaScript file that handles the map logic.
 - `data_processed/`: Directory for the processed data, including the US states shapefile, and the job market statistics. The processing step is implemented in `milestone-2/data_cleaning.ipynb`.
 
-### Installation
+#### Installation
 1. Clone the repository to your local machine.
 2. Open with VS code and install VS Code Live Server extension.
 3. Click "Go Live" in the bottom right corner of the VS code interface.
 
-### Stack
+#### Technical Stack
 Our demo uses html, CSS and javascript (specifically d3.js, leaflet.js) as technical stack.
 
-## Intended Usage
+### Intended Usage
 The user will be able to see the statistics of the current job market, including the number of job posting as well as its median salary for each states in the US. In addition, the user will be able to select a date range to see the statistics within the selected date range. 
 
 The data is visualized three-fold:

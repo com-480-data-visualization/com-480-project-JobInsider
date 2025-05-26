@@ -160,7 +160,7 @@ function updateMap() {
             console.log(`State: ${stateName}, Salary: ${median}`);
         };
         return {
-            fillColor: median ? color(median) : '#ccc',
+            fillColor: median ? color(median) : 'rgba(255, 255, 255, 0)',
             weight: 1.5,
             opacity: 1,
             color: 'black',
@@ -374,7 +374,7 @@ d3.json('data_processed/state_time_series.json').then(stateTimeSeries => {
     showSlider(allDates);
 
     // update map after 100ms
-    setTimeout(updateMap, 100);
+    setTimeout(updateMap, 500);
     setTimeout(() => showChart('California'), 100); // Show California by default
 });
 

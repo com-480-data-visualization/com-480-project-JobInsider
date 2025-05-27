@@ -228,6 +228,16 @@ function showChart(stateName) {
         .attr("class", "chart-svg")
         .append("g")
         .attr("transform", `translate(${margin.left},${margin.top})`);
+    
+    const tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("position", "absolute")
+        .style("background", "#fff")
+        .style("padding", "6px 12px")
+        .style("border", "1px solid #ccc")
+        .style("border-radius", "4px")
+        .style("pointer-events", "none")
+        .style("opacity", 0);
 
     // Scales
     const x = d3.scaleTime()
@@ -249,12 +259,32 @@ function showChart(stateName) {
         .attr("transform", `translate(0,${height})`)
         .call(d3.axisBottom(x));
 
-    svg.append("g")
+    const yJobAxis = svg.append("g")
         .call(d3.axisLeft(yJobs));
 
-    svg.append("g")
+    yJobAxis.append("text")
+        .attr("fill", "black")
+        .attr("text-anchor", "middle")
+        .attr("y", 10)
+        .attr("x", 50)
+        .attr("font-size", "12px")
+        .text("Number of Jobs");
+
+    const ySalaryAxis = svg.append("g")
         .attr("transform", `translate(${width},0)`)
         .call(d3.axisRight(ySalary));
+
+    ySalaryAxis.append("text")
+        .attr("fill", "black")
+        .attr("text-anchor", "middle")
+        .attr("y", 10)
+        .attr("x", -50)
+        .attr("font-size", "12px")
+        .text("Median Salary ($)");
+
+
+
+    // Bar chart for job_count
 
     const barWidth = width / data.length - 2;
 
@@ -269,6 +299,8 @@ function showChart(stateName) {
         .attr("height", d => height - yJobs(d.job_count))
         .attr("fill", "#FFA726")
         .attr("opacity", 0.6);
+
+
 
     // Line chart for median_salary (filter out -1)
     const salaryData = data.filter(d => d.median_salary !== -1);
@@ -292,6 +324,46 @@ function showChart(stateName) {
         .attr("font-size", "16px")
         .attr("fill", "#333")
         .text(`Job Stats for ${stateName} (${startDate} to ${endDate})`);
+
+    // Add toolbar
+    svg.selectAll(".dot")
+        .data(salaryData)
+        .enter()
+        .append("circle")
+        .attr("class", "dot")
+        .attr("cx", d => x(d.date))
+        .attr("cy", d => ySalary(d.median_salary))
+        .attr("r", 8)
+        .attr("fill", "transparent")
+        .on("mouseover", (event, d) => {
+            const job = data.find(item => +item.date === +d.date); // match date to get job_count
+            tooltip.transition().duration(150).style("opacity", 1);
+            tooltip.html(`
+                <strong>Date:</strong> ${d3.timeFormat("%b %Y")(d.date)}<br/>
+                <strong>Job Count:</strong> ${job?.job_count ?? 'N/A'}<br/>
+                <strong>Median Salary:</strong> $${d.median_salary.toLocaleString()}
+            `)
+            .style("left", `${event.pageX + 10}px`)
+            .style("top", `${event.pageY - 28}px`);
+        })
+        .on("mouseout", () => {
+            tooltip.transition().duration(200).style("opacity", 0);
+        });
+    
+    svg.selectAll(".bar")
+        .on("mouseover", (event, d) => {
+            tooltip.transition().duration(150).style("opacity", 1);
+            tooltip.html(`
+                <strong>Date:</strong> ${d3.timeFormat("%b %Y")(d.date)}<br/>
+                <strong>Job Count:</strong> ${d.job_count}<br/>
+                <strong>Median Salary:</strong> ${d.median_salary !== -1 ? `$${d.median_salary.toLocaleString()}` : 'N/A'}
+            `)
+            .style("left", `${event.pageX + 10}px`)
+            .style("top", `${event.pageY - 28}px`);
+        })
+        .on("mouseout", () => {
+            tooltip.transition().duration(200).style("opacity", 0);
+        });
 }
 
 function onEachFeature(feature, layer) {

@@ -3,32 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leaflet Map with D3.js Charts</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js" integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg=" crossorigin=""></script>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script type="text/javascript" src="//unpkg.com/maplibre-gl@4.0.2/dist/maplibre-gl.js"></script>
-    <link href="//unpkg.com/maplibre-gl@4.0.2/dist/maplibre-gl.css" rel="stylesheet">
-    <script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet@0.0.20/leaflet-maplibre-gl.js"></script>
+    <title>JobInsider</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="map"></div>
-    <div id="legend"></div>
-    <div id="chart"></div>
-    <div class="container">
-        <h2>Job Market Dashboard</h2>
-        <p>Welcome! This interactive dashboard will allow job seekers to explore trends in job demand and salaries across various locations, industries and modes of work across the USA.</p>
-        <p>You can hover through the map to see more data about some specific state.</p>
-        <p>Please use the slider below to see the salaries between some especific time through 2023 and 2024.</p>
-        <div id="slider"></div>
-        <p>This page is brought to you by JobInsider:</p>
-        <ul>
-            <li>Cesar Ernesto Illanes Argote</li>
-            <li>Yuanlong Li</li>
-            <li>Tianzong Zhang</li>
-        </ul>
+    <div class="screen-container">
+        <div class="screen" id="screen1">
+            <div class="content-box">
+                <h1>JobInsider</h1>
+                <p>Welcome to JobInsider, our comprehensive tool for exploring the job market landscape. Discover salary trends, industry insights, and regional opportunities across United States. Whether you're targeting specific companies, optimizing your earning potential, or staying ahead of market trends, we provide the data-driven insights you need to make informed career decisions.</p>
+                <div class="navigation-buttons">
+                    <button class="nav-button" onclick="toScreen(2)">I am looking for opportunities</button>
+                    <button class="nav-button" onclick="toScreen(3)">I am looking for insights</button>
+                </div>
+                <p style="font-size: 1.2em;">Brought to you by<br>esar Ernesto Illanes Argote, Yuanlong Li, and Tianzong Zhang</p>
+            </div>
+        </div>
+
+        <div class="screen" id="screen2">
+            <div class="ribbon">
+                <div class="ribbon-content">
+                    <h2>Opportunities</h2>
+                    <div class="selectors">
+                        <div class="selector-group">
+                            <label for="industry-select">Industry:</label>
+                            <select id="industry-select" class="combo-select">
+                                <option value="all">All Industries</option>
+                                <option value="Agriculture & Natural Resources">Agriculture & Natural Resources</option>
+                                <option value="Education & Research">Education & Research</option>
+                                <option value="Finance & Business Services">Finance & Business Services</option>
+                                <option value="Government & Public Sector">Government & Public Sector</option>
+                                <option value="Healthcare & Life Sciences">Healthcare & Life Sciences</option>
+                                <option value="Hospitality & Tourism">Hospitality & Tourism</option>
+                                <option value="Manufacturing & Engineering">Manufacturing & Engineering</option>
+                                <option value="Media & Entertainment">Media & Entertainment</option>
+                                <option value="Non-Profit & Social Services">Non-Profit & Social Services</option>
+                                <option value="Other">Other</option>
+                                <option value="Retail & Consumer Goods">Retail & Consumer Goods</option>
+                                <option value="Technology & IT">Technology & IT</option>
+                                <option value="Transportation & Logistics">Transportation & Logistics</option>
+                            </select>
+                        </div>
+                        <div class="selector-group">
+                            <label for="metric-select">Color by:</label>
+                            <select id="metric-select" class="combo-select">
+                                <option value="median">Median Salary</option>
+                                <option value="avg">Average Salary</option>
+                                <option value="min">Minimum Salary</option>
+                                <option value="max">Maximum Salary</option>
+                                <option value="jobs">Job Count</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="left-panel">
+                <div class="panel-content">
+                    <h3>Select a state to view details</h3>
+                </div>
+            </div>
+            <div id="map"></div>
+            <div id="legend"></div>
+        </div>
+
+        <div class="screen" id="screen3">
+            <div class="ribbon">
+                <div class="ribbon-content">
+                    <h2>Insights</h2>
+                    <div class="selectors">
+                        <div class="selector-group">
+                            <label for="state-select-market">State:</label>
+                            <select id="state-select-market" class="combo-select">
+                                <option value="all">All States</option>
+                            </select>
+                        </div>
+                        <div class="date-input-group">
+                            <label for="market-start-date">From:</label>
+                            <input type="date" id="market-start-date" class="date-input" value="2024-01-01">
+                        </div>
+                        <div class="date-range-slider">
+                            <div class="slider-track"></div>
+                            <input type="range" min="0" max="100" value="0" class="range-input" id="start-range">
+                            <input type="range" min="0" max="100" value="100" class="range-input" id="end-range">
+                            <div class="slider-progress"></div>
+                        </div>
+                        <div class="date-input-group">
+                            <label for="market-end-date">To:</label>
+                            <input type="date" id="market-end-date" class="date-input" value="2024-12-31">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="analysis-grid">
+                <div class="analysis-item">
+                    <h3>Job Distribution by Industry</h3>
+                    <div id="industry-pie-chart"></div>
+                </div>
+                <div class="analysis-item">
+                    <h3>Top Industries by Average Salary</h3>
+                    <div id="industry-bar-chart"></div>
+                </div>
+                <div class="analysis-item">
+                    <h3>Job Distribution by Company</h3>
+                    <div id="company-pie-chart"></div>
+                </div>
+                <div class="analysis-item">
+                    <h3>Top Companies by Average Salary</h3>
+                    <div id="company-bar-chart"></div>
+                </div>
+            </div>
+        </div>
     </div>
-    <script src="map.js"></script>
+
+    <div class="nav-dots">
+        <div class="nav-dot active" data-screen="1"></div>
+        <div class="nav-dot" data-screen="2"></div>
+        <div class="nav-dot" data-screen="3"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="style.js"></script>
+    <script>
+        const sc = document.querySelector('.screen-container');
+        const nd = document.querySelectorAll('.nav-dot');
+
+        function toScreen(num) {
+            const offs = (num - 1) * -100;
+            sc.style.transform = `translateX(${offs}vw)`;
+
+            nd.forEach(d => d.classList.remove('active'));
+            nd[num - 1].classList.add('active');
+
+            const ac = document.getElementById('author-credits');
+
+            if (ac)
+                ac.style.visibility = num === 1 ? 'visible' : 'hidden';
+        }
+
+        nd.forEach(dot => {
+            dot.addEventListener('click', () => {
+                const screenNumber = parseInt(dot.dataset.screen);
+                toScreen(screenNumber);
+            });
+        });
+    </script>
 </body>
 </html>

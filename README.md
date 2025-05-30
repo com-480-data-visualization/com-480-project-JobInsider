@@ -65,9 +65,6 @@ Please refer to [this pdf](milestone-2/milestone_2.pdf) for the report.
 
 **80% of the final grade**
 
-
-**NB: Please use [this link](https://docs.google.com/document/d/118ryUVbMtIioDq76X0Et9nN6jhbf6ABwBqnOl0pCSfk/edit?usp=sharing) to edit the processed book!!**
-
 ### Table of Contents
 - [Overview](#overview)
 - [Technical Setup](#technical-setup)

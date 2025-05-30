@@ -1,4 +1,4 @@
-const map = L.map('map').setView([37.8, -96], 4);
+const map = L.map('map').setView([45, -96], 4);
 L.maplibreGL({
     style: 'https://tiles.stadiamaps.com/styles/stamen_toner.json', 
     attribution: 'Data: <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>',
@@ -24,27 +24,31 @@ function showSlider(allDates) {
     const inputs = slider.append("div")
         .attr("class", "slider-inputs")
 
-    inputs.append("input")
-        .attr("id",    "start-date")
-        .attr("type",  "date")
-        .attr("value",  startDate)
-        .attr("class", "slider-input")
+    inputs.append("div")
+        .attr("class", "slider-input-wrapper")
+        .html(`
+            <label for="start-date">Start Date:</label>
+            <input id="start-date" type="date" class="slider-input" value="${startDate}">
+        `)
+        .select("input")
         .on("change", function() {
             startDate = this.value;
             updateMap();
-        });
+    });
 
-    inputs.append("input")
-        .attr("id",    "end-date")
-        .attr("type",  "date")
-        .attr("value",  endDate)
-        .attr("class", "slider-input")
+    inputs.append("div")
+        .attr("class", "slider-input-wrapper")
+        .html(`
+            <label for="end-date">End Date:</label>
+            <input id="end-date" type="date" class="slider-input" value="${endDate}">
+        `)
+        .select("input")
         .on("change", function() {
             endDate = this.value;
             updateMap();
-        });
+    });
 
-    const w = slider.node().clientWidth;
+    const w = Math.min(slider.node().clientWidth, 580);
     const h = 55;
 
     const svg = slider.append("svg")
@@ -220,8 +224,8 @@ function showChart(stateName) {
     // Clear existing chart
     chart.html("");
 
-    const margin = { top: 15, right: 35, bottom: 15, left: 35 };
-    const width  = chart.node().clientWidth  * 0.68  - margin.left - margin.right;
+    const margin = { top: 15, right: 65, bottom: 15, left: 45 };
+    const width  = chart.node().clientWidth - margin.left - margin.right;
     const height = chart.node().clientHeight * 0.97 - margin.top  - margin.bottom;
 
     const svg = chart.append("svg")

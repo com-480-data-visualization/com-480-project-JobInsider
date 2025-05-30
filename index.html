@@ -13,22 +13,67 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="map"></div>
-    <div id="legend"></div>
-    <div id="chart"></div>
-    <div class="container">
-        <h2>Job Market Dashboard</h2>
-        <p>Welcome! This interactive dashboard will allow job seekers to explore trends in job demand and salaries across various locations, industries and modes of work across the USA.</p>
-        <p>You can hover through the map to see more data about some specific state.</p>
-        <p>Please use the slider below to see the salaries between some especific time through 2023 and 2024.</p>
-        <div id="slider"></div>
-        <p>This page is brought to you by JobInsider:</p>
-        <ul>
-            <li>Cesar Ernesto Illanes Argote</li>
-            <li>Yuanlong Li</li>
-            <li>Tianzong Zhang</li>
-        </ul>
+    <div id="topbar">
+      <div class="topbar-title">Job Market Dashboard</div>
     </div>
+
+    <div id="intro-modal" class="modal">
+      <div class="modal-content">
+        <h2>Job Market Dashboard</h2>
+        <p>
+          Welcome to your interactive guide to the U.S. job market.
+        </p>
+        <p>
+          Are you entering the workforce? Changing careers? Just curious where the best opportunities lie?
+        </p>
+        <p>
+          This dashboard is built to help you <strong>discover job trends</strong> across states.<br>
+          Explore how <strong>demand</strong> and <strong>salary</strong> have evolved through 2023 and 2024, all in one place.
+        </p>
+        <ul>
+          <li>Hover over states to dive into salary and job count trends.</li>
+          <li>Use the chart below to explore job activity over time.</li>
+          <li>Slide through time to watch the market shift.</li>
+        </ul>
+        <p>
+          Our goal is to help job seekers, especially new graduates, make <strong>informed, confident decisions</strong> using real data.
+        </p>
+        <p>
+          You can return to this screen at any time by pressing the help button in the top right corner.
+        </p>
+        <p>
+          <em>This project is brought to you by: <strong>JobInsider</strong></em><br>
+            <ul>
+              <li>Cesar Ernesto Illanes Argote</li>
+              <li>Yuanlong Li</li>
+              <li>Tianzong Zhang</li>
+            </ul>
+        </p>
+        <button onclick="closeModal()" class="modal-button">Got it!</button>
+      </div>
+    </div>
+    <button id="help-button" onclick="openModal()">?</button>
+
+    <div id="slider"></div>
+
+    <div id="main-wrapper">
+      <div id="map"></div>
+      <div id="legend"></div>
+      <div id="chart"></div>
+    </div>
+    
     <script src="map.js"></script>
+    <script>
+      function closeModal() {
+        document.getElementById("intro-modal").style.display = "none";
+      }
+      function openModal() {
+        document.getElementById("intro-modal").style.display = "flex";
+      }
+      window.addEventListener("load", () => {
+        openModal();
+      });
+    </script>
+
 </body>
 </html>

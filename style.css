@@ -32,19 +32,16 @@ h3 {
     color: #fff;
 } */
 #map {
-    position: absolute;
-    top: 0;
-    left: 30%;
-    width: 70%;
-    height: 70%;
-    z-index: 1;
+  position: relative;
+  width: 100%;
+  height: 70%;
+  z-index: 1;
 }
 #chart {
-    position: absolute;
-    left: 30%;
-    bottom: 0;
-    width: 100%;
-    height: 30%;
+  width: 100%;
+  height: 30%;
+  padding: 10px 0;
+  box-sizing: border-box;
 }
 .chart-svg {
     width: 100%;
@@ -53,7 +50,9 @@ h3 {
 .slider-inputs {
     display: flex;
     justify-content: space-between;
-    margin-top: 20px;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 10px;
 }
 .slider-input {
   font-family: 'Segoe UI', sans-serif;
@@ -66,7 +65,17 @@ h3 {
   outline: none;
   transition: all 0.2s ease-in-out;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  width: 48%;
+  flex: 1;
+}
+.slider-input-wrapper label {
+  font-size: 0.75rem;
+  margin-bottom: 4px;
+  display: block;
+  color: #333;
+  font-weight: 500;
+}
+.slider-axis {
+  margin-top: 8px;
 }
 .slider-axis text {
     font-size: 14px;
@@ -81,25 +90,31 @@ h3 {
     fill: #1976D2;
 }
 #legend {
-    position: absolute;
-    bottom: 30%;
-    left: 30%;
-    padding: 20px;
-    background-color: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(10px);
-    z-index: 2;
+  position: absolute;
+  top: 220px;
+  left: 20px;
+  padding: 12px 16px;
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(6px);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  font-size: 13px;
+  z-index: 2;
+  max-width: 140px;
 }
 .legend-item {
-    display: flex;
-    font-size: 14px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
 }
 .legend-div {
-    width: 40px;
-    height: 25px;
-    margin-right: 10px;
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  border-radius: 3px;
 }
 .legend-span {
-    font-size: 16px;
+  font-size: 13px;
 }
 .tooltip {
     position: absolute;
@@ -110,4 +125,119 @@ h3 {
     pointer-events: none;
     font-size: 12px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.modal {
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-content {
+  background-color: #fff;
+  padding: 30px;
+  max-width: 600px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  text-align: left;
+}
+.modal-button {
+  margin-top: 20px;
+  padding: 10px 16px;
+  background-color: #1976D2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.modal-button:hover {
+  background-color: #155a9c;
+}
+#help-button {
+  position: absolute;
+  top: 72px;
+  right: 20px;
+  background-color: #1976D2;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+#slider {
+  position: absolute;
+  top: 72px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(6px);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  z-index: 10;
+  overflow: visible;
+  padding-bottom: 24px;
+}
+#slider svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+#main-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+.modal-content {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 15px;
+}
+.modal-content p {
+  margin-bottom: 1em;
+  line-height: 1.6;
+}
+.modal-content ul {
+  margin-bottom: 1em;
+  padding-left: 1.2em;
+}
+.modal-content li {
+  margin-bottom: 0.5em;
+}
+#topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 48px;
+  background-color: #ffffffee;
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  border-bottom: 1px solid #ddd;
+  z-index: 1001;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.topbar-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #222;
+}
+.leaflet-top.leaflet-left {
+  top: 72px !important;
 }
